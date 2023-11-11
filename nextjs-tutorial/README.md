@@ -1801,6 +1801,16 @@ npm run build
 npm start
 ```
 
+## Force Dynamic
+
+- add loading.js to tasks
+
+tasks.js
+
+```js
+export const dynamic = 'force-dynamic';
+```
+
 ## Deploy
 
 [Vercel](https://vercel.com/)
