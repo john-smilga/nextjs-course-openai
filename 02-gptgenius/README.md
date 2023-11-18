@@ -1120,6 +1120,18 @@ If you can't find info on exact ${city}, or ${city} does not exist, or it's popu
 };
 ```
 
+## Shorter Prompt
+
+```js
+{
+  "tour": {
+    ...
+   "stops": ["stop name ", "stop name","stop name"]
+  }
+}
+```
+
+
 ## TourInfo
 
 TourInfo.jsx
