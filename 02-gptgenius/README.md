@@ -1662,10 +1662,6 @@ export default SingleTourPage;
 
 ## Deploy
 
-- planetscale
-- github repo
-- vercel
-
 package.json
 
 ```js
@@ -1674,3 +1670,10 @@ package.json
     "build": "npx prisma generate && next build",
   },
 ```
+
+- shorter prompt
+  "stops":["stop 1","stop 2", "stop 3"]
+
+- planetscale
+- github repo
+- vercel
