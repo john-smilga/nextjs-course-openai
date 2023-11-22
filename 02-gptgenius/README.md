@@ -1809,7 +1809,7 @@ profile/page.js
 ```js
 import { fetchUserTokensById } from '@/utils/actions';
 import { UserProfile, auth } from '@clerk/nextjs';
-export const dynamic = 'force-dynamic';
+
 const ProfilePage = async () => {
   const { userId } = auth();
   const currentTokens = await fetchUserTokensById(userId);
