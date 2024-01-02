@@ -1,4 +1,5 @@
-import JobsContainer from '@/components/JobsContainer';
+import JobsList from '@/components/JobsList';
+import SearchForm from '@/components/SearchForm';
 import {
   dehydrate,
   HydrationBoundary,
@@ -15,8 +16,10 @@ async function AllJobsPage() {
   });
   return (
     <HydrationBoundary state={dehydrate(queryClient)}>
-      <JobsContainer />
+      <SearchForm />
+      <JobsList />
     </HydrationBoundary>
   );
 }
+
 export default AllJobsPage;

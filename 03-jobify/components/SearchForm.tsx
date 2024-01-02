@@ -1,6 +1,6 @@
 'use client';
 import { Input } from './ui/input';
-import { usePathname, useRouter } from 'next/navigation';
+import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 import { Button } from './ui/button';
 
 import {
@@ -12,12 +12,10 @@ import {
 } from '@/components/ui/select';
 import { JobStatus } from '@/utils/types';
 
-type SearchContainerProps = {
-  search: string;
-  jobStatus: string;
-};
-
-function SearchContainer({ search, jobStatus }: SearchContainerProps) {
+function SearchContainer() {
+  const searchParams = useSearchParams();
+  const search = searchParams.get('search') || '';
+  const jobStatus = searchParams.get('jobStatus') || 'all';
   const router = useRouter();
   const pathname = usePathname();
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
@@ -35,7 +33,7 @@ function SearchContainer({ search, jobStatus }: SearchContainerProps) {
 
   return (
     <form
-      className='bg-muted mb-16 p-8 grid sm:grid-cols-2 md:grid-cols-3  gap-4'
+      className='bg-muted mb-16 p-8 grid sm:grid-cols-2 md:grid-cols-3  gap-4 rounded-lg'
       onSubmit={handleSubmit}
     >
       <Input

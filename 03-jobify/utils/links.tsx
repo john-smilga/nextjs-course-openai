@@ -1,6 +1,4 @@
-import { IoBarChartSharp } from 'react-icons/io5';
-import { MdQueryStats } from 'react-icons/md';
-import { FaWpforms } from 'react-icons/fa';
+import { AreaChart, Layers, AppWindow } from 'lucide-react';
 
 type NavLink = {
   href: string;
@@ -12,17 +10,17 @@ const links: NavLink[] = [
   {
     href: '/add-job',
     label: 'add job',
-    icon: <FaWpforms />,
+    icon: <Layers />,
   },
   {
     href: '/jobs',
     label: 'all jobs',
-    icon: <MdQueryStats />,
+    icon: <AppWindow />,
   },
   {
     href: '/stats',
     label: 'stats',
-    icon: <IoBarChartSharp />,
+    icon: <AreaChart />,
   },
 ];
 

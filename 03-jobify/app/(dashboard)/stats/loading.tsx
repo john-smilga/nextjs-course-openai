@@ -1,4 +1,4 @@
-function Loading() {
-  return <h2 className='text-xl font-medium'>Loading...</h2>;
+function loading() {
+  return <h2 className='text-xl font-medium capitalize'>loading...</h2>;
 }
-export default Loading;
+export default loading;

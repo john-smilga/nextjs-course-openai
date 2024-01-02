@@ -1,6 +1,6 @@
 import Image from 'next/image';
-import Logo from '../assets/images/logo.svg';
-import LandingImg from '../assets/images/main.svg';
+import Logo from '../assets/logo.svg';
+import LandingImg from '../assets/main.svg';
 import { Button } from '@/components/ui/button';
 import Link from 'next/link';
 export default function Home() {

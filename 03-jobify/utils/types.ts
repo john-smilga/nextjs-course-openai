@@ -1,15 +1,4 @@
 import * as z from 'zod';
-export enum JobStatus {
-  Pending = 'pending',
-  Interview = 'interview',
-  Declined = 'declined',
-}
-
-export enum JobMode {
-  FullTime = 'full-time',
-  PartTime = 'part-time',
-  Internship = 'internship',
-}
 
 export type JobType = {
   id: string;
@@ -22,6 +11,18 @@ export type JobType = {
   status: string;
   mode: string;
 };
+
+export enum JobStatus {
+  Pending = 'pending',
+  Interview = 'interview',
+  Declined = 'declined',
+}
+
+export enum JobMode {
+  FullTime = 'full-time',
+  PartTime = 'part-time',
+  Internship = 'internship',
+}
 
 export const createAndEditJobSchema = z.object({
   position: z.string().min(2, {

@@ -4,7 +4,7 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
-import { FaAlignLeft } from 'react-icons/fa';
+import { AlignLeft } from 'lucide-react';
 import { Button } from './ui/button';
 import links from '@/utils/links';
 import Link from 'next/link';
@@ -12,12 +12,17 @@ function DropdownLinks() {
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild className='lg:hidden'>
-        <Button variant='ghost' size='icon'>
-          <FaAlignLeft className='h-[1.2rem] w-[1.2rem]' />
+        <Button variant='outline' size='icon'>
+          <AlignLeft />
+
           <span className='sr-only'>Toggle links</span>
         </Button>
       </DropdownMenuTrigger>
-      <DropdownMenuContent className='lg:hidden' align='start' sideOffset={25}>
+      <DropdownMenuContent
+        className='w-52 lg:hidden '
+        align='start'
+        sideOffset={25}
+      >
         {links.map((link) => {
           return (
             <DropdownMenuItem key={link.href}>

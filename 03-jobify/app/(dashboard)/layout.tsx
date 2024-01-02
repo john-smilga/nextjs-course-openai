@@ -1,6 +1,6 @@
 import Navbar from '@/components/Navbar';
 import Sidebar from '@/components/Sidebar';
-import { Separator } from '@/components/ui/separator';
+
 import { PropsWithChildren } from 'react';
 
 function layout({ children }: PropsWithChildren) {

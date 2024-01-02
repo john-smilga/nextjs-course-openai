@@ -2,13 +2,15 @@
 
 import prisma from './db';
 import { auth } from '@clerk/nextjs';
-import { JobType, CreateAndEditJobType } from './types';
+import { JobType, CreateAndEditJobType, createAndEditJobSchema } from './types';
 import { redirect } from 'next/navigation';
 import { Prisma } from '@prisma/client';
 import dayjs from 'dayjs';
 
 function authenticateAndRedirect(): string {
   const { userId } = auth();
+  console.log(userId);
+
   if (!userId) {
     redirect('/');
   }
@@ -18,9 +20,10 @@ function authenticateAndRedirect(): string {
 export async function createJobAction(
   values: CreateAndEditJobType
 ): Promise<JobType | null> {
-  await new Promise((resolve) => setTimeout(resolve, 3000));
+  // await new Promise((resolve) => setTimeout(resolve, 3000));
   const userId = authenticateAndRedirect();
   try {
+    createAndEditJobSchema.parse(values);
     const job: JobType = await prisma.job.create({
       data: {
         ...values,
@@ -34,6 +37,7 @@ export async function createJobAction(
     return null;
   }
 }
+
 type GetAllJobsActionTypes = {
   search?: string;
   jobStatus?: string;
@@ -159,7 +163,6 @@ export async function updateJobAction(
     return null;
   }
 }
-
 export async function getStatsAction(): Promise<{
   pending: number;
   interview: number;
