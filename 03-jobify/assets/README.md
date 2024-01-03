@@ -147,7 +147,7 @@ export default function Home() {
 
 - create add-job, jobs and stats pages
 - group them in (dashboard)
-- setup a layout file (just pass children)
+- setup a layout file (for now just pass children)
 
 ## Dashboard Pages
 
@@ -372,7 +372,7 @@ export default layout;
 
 ```tsx
 'use client';
-import Logo from '@/assets/images/logo.svg';
+import Logo from '@/assets/logo.svg';
 import links from '@/utils/links';
 import Image from 'next/image';
 import Link from 'next/link';
@@ -2642,10 +2642,10 @@ import {
 async function StatsPage() {
   const queryClient = new QueryClient();
 
-  await queryClient.prefetchQuery({
-    queryKey: ['stats'],
-    queryFn: () => getStatsAction(),
-  });
+  // await queryClient.prefetchQuery({
+  //   queryKey: ['stats'],
+  //   queryFn: () => getStatsAction(),
+  // });
   await queryClient.prefetchQuery({
     queryKey: ['charts'],
     queryFn: () => getChartsDataAction(),
@@ -2801,15 +2801,22 @@ export default StatsCards;
 'use client';
 import { useQuery } from '@tanstack/react-query';
 import { getStatsAction } from '@/utils/actions';
-import StatsCardfrom './StatsCard';
+import StatsCard, { StatsLoadingCard } from './StatsCard';
 
 function StatsContainer() {
-  const { data } = useQuery({
+  const { data, isPending } = useQuery({
     queryKey: ['stats'],
     queryFn: () => getStatsAction(),
   });
 
-
+  if (isPending)
+    return (
+      <div className='grid md:grid-cols-2 gap-4 lg:grid-cols-3'>
+        <StatsLoadingCard />
+        <StatsLoadingCard />
+        <StatsLoadingCard />
+      </div>
+    );
 
   return (
     <div className='grid md:grid-cols-2 gap-4 lg:grid-cols-3'>
@@ -2820,41 +2827,6 @@ function StatsContainer() {
   );
 }
 export default StatsContainer;
-```
-
-## Setup Loading
-
-stats/loading.tsx
-
-```tsx
-import { StatsLoadingCard } from '@/components/StatsCard';
-function loading() {
-  return (
-    <div className='grid md:grid-cols-2 gap-4 lg:grid-cols-3'>
-      <StatsLoadingCard />
-      <StatsLoadingCard />
-      <StatsLoadingCard />
-    </div>
-  );
-}
-export default loading;
-```
-
-jobs/loading.tsx
-
-```tsx
-import { Skeleton } from '@/components/ui/skeleton';
-
-function loading() {
-  return (
-    <div className='p-8 grid sm:grid-cols-2 md:grid-cols-3  gap-4 rounded-lg border'>
-      <Skeleton className='h-10' />
-      <Skeleton className='h-10 ' />
-      <Skeleton className='h-10 ' />
-    </div>
-  );
-}
-export default loading;
 ```
 
 ## Explore Re-charts Library
