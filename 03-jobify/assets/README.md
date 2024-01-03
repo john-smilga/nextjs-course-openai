@@ -2642,10 +2642,10 @@ import {
 async function StatsPage() {
   const queryClient = new QueryClient();
 
-  // await queryClient.prefetchQuery({
-  //   queryKey: ['stats'],
-  //   queryFn: () => getStatsAction(),
-  // });
+  await queryClient.prefetchQuery({
+    queryKey: ['stats'],
+    queryFn: () => getStatsAction(),
+  });
   await queryClient.prefetchQuery({
     queryKey: ['charts'],
     queryFn: () => getChartsDataAction(),
@@ -2801,22 +2801,15 @@ export default StatsCards;
 'use client';
 import { useQuery } from '@tanstack/react-query';
 import { getStatsAction } from '@/utils/actions';
-import StatsCard, { StatsLoadingCard } from './StatsCard';
+import StatsCardfrom './StatsCard';
 
 function StatsContainer() {
-  const { data, isPending } = useQuery({
+  const { data } = useQuery({
     queryKey: ['stats'],
     queryFn: () => getStatsAction(),
   });
 
-  if (isPending)
-    return (
-      <div className='grid md:grid-cols-2 gap-4 lg:grid-cols-3'>
-        <StatsLoadingCard />
-        <StatsLoadingCard />
-        <StatsLoadingCard />
-      </div>
-    );
+
 
   return (
     <div className='grid md:grid-cols-2 gap-4 lg:grid-cols-3'>
@@ -2827,6 +2820,41 @@ function StatsContainer() {
   );
 }
 export default StatsContainer;
+```
+
+## Setup Loading
+
+stats/loading.tsx
+
+```tsx
+import { StatsLoadingCard } from '@/components/StatsCard';
+function loading() {
+  return (
+    <div className='grid md:grid-cols-2 gap-4 lg:grid-cols-3'>
+      <StatsLoadingCard />
+      <StatsLoadingCard />
+      <StatsLoadingCard />
+    </div>
+  );
+}
+export default loading;
+```
+
+jobs/loading.tsx
+
+```tsx
+import { Skeleton } from '@/components/ui/skeleton';
+
+function loading() {
+  return (
+    <div className='p-8 grid sm:grid-cols-2 md:grid-cols-3  gap-4 rounded-lg border'>
+      <Skeleton className='h-10' />
+      <Skeleton className='h-10 ' />
+      <Skeleton className='h-10 ' />
+    </div>
+  );
+}
+export default loading;
 ```
 
 ## Explore Re-charts Library
@@ -3217,3 +3245,5 @@ function ButtonContainer({ currentPage, totalPages }: ButtonContainerProps) {
 }
 export default ButtonContainer;
 ```
+
+## THE END
