@@ -545,7 +545,6 @@ export default DropdownLinks;
 
 - create providers.tsx
 - wrap children in layout
-- add suppressHydrationWarning prop
 
 ## Providers
 
@@ -641,7 +640,7 @@ import {
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
 
-export function ModeToggle() {
+export default function ModeToggle() {
   const { setTheme } = useTheme();
 
   return (
@@ -669,21 +668,25 @@ export function ModeToggle() {
 }
 ```
 
-## CreateJobForm Setup
+## Shadcn/ui Forms
 
-- components/CreateJobForm
-- render in add-job/page.tsx
+- install
 
 ```sh
 npx shadcn-ui@latest add form input
 ```
 
+## CreateJobForm Setup
+
+- components/CreateJobForm
+- render in add-job/page.tsx
+
 ```tsx
 'use client';
 
+import * as z from 'zod';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useForm } from 'react-hook-form';
-import * as z from 'zod';
 
 import { Button } from '@/components/ui/button';
 import {
@@ -812,6 +815,7 @@ export enum JobMode {
   PartTime = 'part-time',
   Internship = 'internship',
 }
+// Enums in TypeScript are a special type that allows you to define a set of named constants. They can be numeric or string-based.
 
 export const createAndEditJobSchema = z.object({
   position: z.string().min(2, {
@@ -836,6 +840,27 @@ export type CreateAndEditJobType = z.infer<typeof createAndEditJobSchema>;
 
 ```sh
 npx shadcn-ui@latest add select
+```
+
+```tsx
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from '@/components/ui/select';
+
+<Select>
+  <SelectTrigger className='w-[180px]'>
+    <SelectValue placeholder='Theme' />
+  </SelectTrigger>
+  <SelectContent>
+    <SelectItem value='light'>Light</SelectItem>
+    <SelectItem value='dark'>Dark</SelectItem>
+    <SelectItem value='system'>System</SelectItem>
+  </SelectContent>
+</Select>;
 ```
 
 - [docs](https://ui.shadcn.com/docs/components/select)
@@ -1235,7 +1260,7 @@ npx prisma db push
 
 ## CreateJobAction
 
-- utils/actions
+- utils/actions.ts
 
 ```ts
 'use server';
@@ -1295,7 +1320,7 @@ npx shadcn-ui@latest add toast
 
 ## Add React Query and Toaster
 
-- app/provider
+- app/providers.tsx
 
 ```tsx
 'use client';
