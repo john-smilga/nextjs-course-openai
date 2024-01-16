@@ -50,7 +50,6 @@ function ButtonContainer({ currentPage, totalPages }: ButtonContainerProps) {
       addPageButton({ page: 1, activeClass: currentPage === 1 })
     );
     // dots
-
     if (currentPage > 3) {
       pageButtons.push(
         <Button size='icon' variant='outline' key='dots-1'>
@@ -58,15 +57,12 @@ function ButtonContainer({ currentPage, totalPages }: ButtonContainerProps) {
         </Button>
       );
     }
-    // one before current page
     if (currentPage !== 1 && currentPage !== 2) {
       pageButtons.push(
-        addPageButton({
-          page: currentPage - 1,
-          activeClass: false,
-        })
+        addPageButton({ page: currentPage - 1, activeClass: false })
       );
     }
+
     // current page
     if (currentPage !== 1 && currentPage !== totalPages) {
       pageButtons.push(
@@ -77,22 +73,19 @@ function ButtonContainer({ currentPage, totalPages }: ButtonContainerProps) {
       );
     }
     // one after current page
-
     if (currentPage !== totalPages && currentPage !== totalPages - 1) {
       pageButtons.push(
-        addPageButton({
-          page: currentPage + 1,
-          activeClass: false,
-        })
+        addPageButton({ page: currentPage + 1, activeClass: false })
       );
     }
     if (currentPage < totalPages - 2) {
       pageButtons.push(
-        <Button size='icon' variant='outline' key='dots-1'>
+        <Button size='icon' variant='outline' key='dots-2'>
           ...
         </Button>
       );
     }
+
     pageButtons.push(
       addPageButton({
         page: totalPages,

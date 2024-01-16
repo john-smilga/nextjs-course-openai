@@ -15,9 +15,9 @@ import { Button } from './ui/button';
 import { Badge } from './ui/badge';
 import JobInfo from './JobInfo';
 import DeleteJobButton from './DeleteJobButton';
-
 function JobCard({ job }: { job: JobType }) {
   const date = new Date(job.createdAt).toLocaleDateString();
+
   return (
     <Card className='bg-muted'>
       <CardHeader>
@@ -29,7 +29,7 @@ function JobCard({ job }: { job: JobType }) {
         <JobInfo icon={<Briefcase />} text={job.mode} />
         <JobInfo icon={<MapPin />} text={job.location} />
         <JobInfo icon={<CalendarDays />} text={date} />
-        <Badge className='w-32  justify-center'>
+        <Badge className='w-32 justify-center'>
           <JobInfo
             icon={<RadioTower className='w-4 h-4' />}
             text={job.status}

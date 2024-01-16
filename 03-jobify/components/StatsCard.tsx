@@ -4,9 +4,7 @@ import {
   CardHeader,
   CardTitle,
 } from '@/components/ui/card';
-
 import { Skeleton } from './ui/skeleton';
-
 type StatsCardsProps = {
   title: string;
   value: number;

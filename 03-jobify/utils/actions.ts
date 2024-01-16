@@ -9,31 +9,27 @@ import dayjs from 'dayjs';
 
 function authenticateAndRedirect(): string {
   const { userId } = auth();
-  console.log(userId);
 
-  if (!userId) {
-    redirect('/');
-  }
+  if (!userId) redirect('/');
   return userId;
 }
 
 export async function createJobAction(
   values: CreateAndEditJobType
 ): Promise<JobType | null> {
-  // await new Promise((resolve) => setTimeout(resolve, 3000));
+  await new Promise((resolve) => setTimeout(resolve, 3000));
   const userId = authenticateAndRedirect();
   try {
     createAndEditJobSchema.parse(values);
     const job: JobType = await prisma.job.create({
       data: {
         ...values,
-
         clerkId: userId,
       },
     });
     return job;
   } catch (error) {
-    console.error(error);
+    console.log(error);
     return null;
   }
 }
@@ -79,6 +75,7 @@ export async function getAllJobsAction({
         ],
       };
     }
+
     if (jobStatus && jobStatus !== 'all') {
       whereClause = {
         ...whereClause,
@@ -86,6 +83,9 @@ export async function getAllJobsAction({
       };
     }
     const skip = (page - 1) * limit;
+
+    // 1 0
+    // 2 10
 
     const jobs: JobType[] = await prisma.job.findMany({
       where: whereClause,
@@ -95,13 +95,13 @@ export async function getAllJobsAction({
         createdAt: 'desc',
       },
     });
+
     const count: number = await prisma.job.count({
       where: whereClause,
     });
     const totalPages = Math.ceil(count / limit);
     return { jobs, count, page, totalPages };
   } catch (error) {
-    console.error(error);
     return { jobs: [], count: 0, page: 1, totalPages: 0 };
   }
 }
@@ -163,22 +163,24 @@ export async function updateJobAction(
     return null;
   }
 }
+
 export async function getStatsAction(): Promise<{
   pending: number;
   interview: number;
   declined: number;
 }> {
+  await new Promise((resolve) => setTimeout(resolve, 5000));
+
   const userId = authenticateAndRedirect();
-  // just to show Skeleton
-  // await new Promise((resolve) => setTimeout(resolve, 5000));
+
   try {
     const stats = await prisma.job.groupBy({
+      where: {
+        clerkId: userId,
+      },
       by: ['status'],
       _count: {
         status: true,
-      },
-      where: {
-        clerkId: userId, // replace userId with the actual clerkId
       },
     });
     const statsObject = stats.reduce((acc, curr) => {

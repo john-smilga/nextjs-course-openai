@@ -1,22 +1,13 @@
 'use client';
 import { useQuery } from '@tanstack/react-query';
 import { getStatsAction } from '@/utils/actions';
-import StatsCard, { StatsLoadingCard } from './StatsCard';
+import StatsCard from './StatsCard';
 
 function StatsContainer() {
-  const { data, isPending } = useQuery({
+  const { data } = useQuery({
     queryKey: ['stats'],
     queryFn: () => getStatsAction(),
   });
-
-  if (isPending)
-    return (
-      <div className='grid md:grid-cols-2 gap-4 lg:grid-cols-3'>
-        <StatsLoadingCard />
-        <StatsLoadingCard />
-        <StatsLoadingCard />
-      </div>
-    );
 
   return (
     <div className='grid md:grid-cols-2 gap-4 lg:grid-cols-3'>

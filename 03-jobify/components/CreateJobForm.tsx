@@ -10,8 +10,9 @@ import {
   CreateAndEditJobType,
 } from '@/utils/types';
 
+import { Button } from '@/components/ui/button';
 import { Form } from '@/components/ui/form';
-import { Button } from './ui/button';
+
 import { CustomFormField, CustomFormSelect } from './FormComponents';
 
 import { useMutation, useQueryClient } from '@tanstack/react-query';
@@ -20,7 +21,6 @@ import { useToast } from '@/components/ui/use-toast';
 import { useRouter } from 'next/navigation';
 
 function CreateJobForm() {
-  // 1. Define your form.
   const form = useForm<CreateAndEditJobType>({
     resolver: zodResolver(createAndEditJobSchema),
     defaultValues: {
@@ -31,6 +31,7 @@ function CreateJobForm() {
       mode: JobMode.FullTime,
     },
   });
+
   const queryClient = useQueryClient();
   const { toast } = useToast();
   const router = useRouter();
@@ -38,18 +39,15 @@ function CreateJobForm() {
     mutationFn: (values: CreateAndEditJobType) => createJobAction(values),
     onSuccess: (data) => {
       if (!data) {
-        toast({
-          description: 'there was an error',
-        });
+        toast({ description: 'there was an error' });
         return;
       }
       toast({ description: 'job created' });
       queryClient.invalidateQueries({ queryKey: ['jobs'] });
       queryClient.invalidateQueries({ queryKey: ['stats'] });
       queryClient.invalidateQueries({ queryKey: ['charts'] });
-
+      // form.reset()
       router.push('/jobs');
-      // form.reset();
     },
   });
 
@@ -59,8 +57,8 @@ function CreateJobForm() {
   return (
     <Form {...form}>
       <form
-        className='bg-muted p-8 rounded'
         onSubmit={form.handleSubmit(onSubmit)}
+        className='bg-muted p-8 rounded'
       >
         <h2 className='capitalize font-semibold text-4xl mb-6'>add job</h2>
         <div className='grid gap-4 md:grid-cols-2 lg:grid-cols-3 items-start'>
@@ -77,7 +75,7 @@ function CreateJobForm() {
             labelText='job status'
             items={Object.values(JobStatus)}
           />
-          {/* job  type */}
+          {/* job mode */}
           <CustomFormSelect
             name='mode'
             control={form.control}
@@ -89,7 +87,7 @@ function CreateJobForm() {
             className='self-end capitalize'
             disabled={isPending}
           >
-            {isPending ? 'loading...' : 'create job'}
+            {isPending ? 'loading' : 'create job'}
           </Button>
         </div>
       </form>

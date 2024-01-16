@@ -1662,11 +1662,11 @@ function SearchContainer() {
   const pathname = usePathname();
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    let params = new URLSearchParams();
 
     const formData = new FormData(e.currentTarget);
     const search = formData.get('search') as string;
     const jobStatus = formData.get('jobStatus') as string;
+    let params = new URLSearchParams();
     params.set('search', search);
     params.set('jobStatus', jobStatus);
 
@@ -2010,8 +2010,6 @@ export async function deleteJobAction(id: string): Promise<JobType | null> {
 
 ```tsx
 import { Button } from './ui/button';
-import { Badge } from './ui/badge';
-import JobInfo from './JobInfo';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { deleteJobAction } from '@/utils/actions';
 import { useToast } from '@/components/ui/use-toast';
@@ -2300,11 +2298,7 @@ import { Form } from '@/components/ui/form';
 
 import { CustomFormField, CustomFormSelect } from './FormComponents';
 import { useMutation, useQueryClient, useQuery } from '@tanstack/react-query';
-import {
-  createJobAction,
-  getSingleJobAction,
-  updateJobAction,
-} from '@/utils/actions';
+import { getSingleJobAction, updateJobAction } from '@/utils/actions';
 import { useToast } from '@/components/ui/use-toast';
 import { useRouter } from 'next/navigation';
 function EditJobForm({ jobId }: { jobId: string }) {
@@ -2415,7 +2409,7 @@ const data = require('./mock-data.json');
 const prisma = new PrismaClient();
 
 async function main() {
-  const clerkId = 'user_2ZUfUOtKM8W9eF8hSQbISv7aQmn';
+  const clerkId = 'clerkUserId';
   const jobs = data.map((job) => {
     return {
       ...job,
@@ -2491,16 +2485,15 @@ export async function getStatsAction(): Promise<{
   declined: number;
 }> {
   const userId = authenticateAndRedirect();
-  // just to show Skeleton
-  // await new Promise((resolve) => setTimeout(resolve, 5000));
+
   try {
     const stats = await prisma.job.groupBy({
+      where: {
+        clerkId: userId,
+      },
       by: ['status'],
       _count: {
         status: true,
-      },
-      where: {
-        clerkId: userId, // replace userId with the actual clerkId
       },
     });
     const statsObject = stats.reduce((acc, curr) => {
@@ -2648,13 +2641,6 @@ export async function getChartsDataAction(): Promise<
 - create StatsContainer and ChartsContainer components
 
 ```tsx
-function loading() {
-  return <h2 className='text-xl font-medium capitalize'>loading...</h2>;
-}
-export default loading;
-```
-
-```tsx
 import ChartsContainer from '@/components/ChartsContainer';
 import StatsContainer from '@/components/StatsContainer';
 import { getChartsDataAction, getStatsAction } from '@/utils/actions';
@@ -2667,10 +2653,10 @@ import {
 async function StatsPage() {
   const queryClient = new QueryClient();
 
-  // await queryClient.prefetchQuery({
-  //   queryKey: ['stats'],
-  //   queryFn: () => getStatsAction(),
-  // });
+  await queryClient.prefetchQuery({
+    queryKey: ['stats'],
+    queryFn: () => getStatsAction(),
+  });
   await queryClient.prefetchQuery({
     queryKey: ['charts'],
     queryFn: () => getChartsDataAction(),
@@ -2684,17 +2670,6 @@ async function StatsPage() {
 }
 export default StatsPage;
 ```
-
-## Explore - Shadcn/ui Skeleton component
-
-- install
-
-```sh
-npx shadcn-ui@latest add skeleton
-
-```
-
-[docs](https://ui.shadcn.com/docs/components/skeleton)
 
 ## Challenge - StatsCard
 
@@ -2717,26 +2692,6 @@ npx shadcn-ui@latest add skeleton
 
    - After defining the `StatsCards` component, export it so it can be used in other parts of your application.
 
-4. **Import necessary libraries and components for StatsLoadingCard**
-
-   - Import `React` from the react library.
-   - Import `Card`, `CardHeader` from your UI components directory.
-   - Import `Skeleton` from your UI components directory.
-
-5. **Define the StatsLoadingCard component**
-
-   - Define a function component named `StatsLoadingCard`.
-   - In the component's return statement, create the component UI using the `Card`, `CardHeader`, and `Skeleton` components.
-   - The `Card` component should have a `CardHeader` child.
-   - The `CardHeader` component should have a div child with two `Skeleton` children.
-   - The div element should have a `className` of 'space-y-2'.
-   - The first `Skeleton` component should have a `className` of 'h-12 w-12 rounded-full'.
-   - The second `Skeleton` component should have a `className` of 'h-4 w-[150px]'.
-   - The third `Skeleton` component should have a `className` of 'h-4 w-[100px]'.
-
-6. **Export the StatsLoadingCard component**
-   - After defining the `StatsLoadingCard` component, export it so it can be used in other parts of your application.
-
 ## StatsCard
 
 ```tsx
@@ -2746,8 +2701,6 @@ import {
   CardHeader,
   CardTitle,
 } from '@/components/ui/card';
-
-import { Skeleton } from './ui/skeleton';
 
 type StatsCardsProps = {
   title: string;
@@ -2762,22 +2715,6 @@ function StatsCards({ title, value }: StatsCardsProps) {
         <CardDescription className='text-4xl font-extrabold text-primary mt-[0px!important]'>
           {value}
         </CardDescription>
-      </CardHeader>
-    </Card>
-  );
-}
-
-export function StatsLoadingCard() {
-  return (
-    <Card className='w-[330px] h-[88px]'>
-      <CardHeader className='flex flex-row justify-between items-center'>
-        <div className='flex items-center space-x-4'>
-          <Skeleton className='h-12 w-12 rounded-full' />
-          <div className='space-y-2'>
-            <Skeleton className='h-4 w-[150px]' />
-            <Skeleton className='h-4 w-[100px]' />
-          </div>
-        </div>
       </CardHeader>
     </Card>
   );
@@ -2805,19 +2742,14 @@ export default StatsCards;
    - The `queryKey` property should be an array with 'stats'.
    - The `queryFn` property should be a function that calls `getStatsAction`.
 
-4. **Handle the loading state**
-
-   - Inside `StatsContainer`, add a conditional return statement that checks if `isPending` is true.
-   - If `isPending` is true, return a `div` element with three `StatsLoadingCard` children.
-
-5. **Handle the data state**
+4. **Handle the data state**
 
    - After the loading state check, return a `div` element with three `StatsCard` children.
    - Each `StatsCard` should have `title` and `value` props.
    - The `title` prop should be a string that describes the data.
    - The `value` prop should be a value from the data object or 0 if the value is undefined.
 
-6. **Export the StatsContainer component**
+5. **Export the StatsContainer component**
    - After defining the `StatsContainer` component, export it so it can be used in other parts of your application.
 
 ## StatsContainer
@@ -2826,22 +2758,13 @@ export default StatsCards;
 'use client';
 import { useQuery } from '@tanstack/react-query';
 import { getStatsAction } from '@/utils/actions';
-import StatsCard, { StatsLoadingCard } from './StatsCard';
+import StatsCard from './StatsCard';
 
 function StatsContainer() {
-  const { data, isPending } = useQuery({
+  const { data } = useQuery({
     queryKey: ['stats'],
     queryFn: () => getStatsAction(),
   });
-
-  if (isPending)
-    return (
-      <div className='grid md:grid-cols-2 gap-4 lg:grid-cols-3'>
-        <StatsLoadingCard />
-        <StatsLoadingCard />
-        <StatsLoadingCard />
-      </div>
-    );
 
   return (
     <div className='grid md:grid-cols-2 gap-4 lg:grid-cols-3'>
@@ -2852,6 +2775,74 @@ function StatsContainer() {
   );
 }
 export default StatsContainer;
+```
+
+## Explore - Shadcn/ui Skeleton component
+
+- install
+
+```sh
+npx shadcn-ui@latest add skeleton
+
+```
+
+[docs](https://ui.shadcn.com/docs/components/skeleton)
+
+## StatsLoadingCard
+
+StatsCard.tsx
+
+```tsx
+export function StatsLoadingCard() {
+  return (
+    <Card className='w-[330px] h-[88px]'>
+      <CardHeader className='flex flex-row justify-between items-center'>
+        <div className='flex items-center space-x-4'>
+          <Skeleton className='h-12 w-12 rounded-full' />
+          <div className='space-y-2'>
+            <Skeleton className='h-4 w-[150px]' />
+            <Skeleton className='h-4 w-[100px]' />
+          </div>
+        </div>
+      </CardHeader>
+    </Card>
+  );
+}
+```
+
+## Loading
+
+stats/loading.tsx
+
+```tsx
+import { StatsLoadingCard } from '@/components/StatsCard';
+function loading() {
+  return (
+    <div className='grid md:grid-cols-2 gap-4 lg:grid-cols-3'>
+      <StatsLoadingCard />
+      <StatsLoadingCard />
+      <StatsLoadingCard />
+    </div>
+  );
+}
+export default loading;
+```
+
+jobs/loading.tsx
+
+```tsx
+import { Skeleton } from '@/components/ui/skeleton';
+
+function loading() {
+  return (
+    <div className='p-8 grid sm:grid-cols-2 md:grid-cols-3  gap-4 rounded-lg border'>
+      <Skeleton className='h-10' />
+      <Skeleton className='h-10 ' />
+      <Skeleton className='h-10 ' />
+    </div>
+  );
+}
+export default loading;
 ```
 
 ## Explore Re-charts Library
@@ -2876,17 +2867,12 @@ export default StatsContainer;
    - The `queryKey` property should be an array with a unique key.
    - The `queryFn` property should be a function that fetches the data you want to display in the chart.
 
-4. **Handle the loading state**
-
-   - Inside `ChartsContainer`, add a conditional return statement that checks if `isPending` is true.
-   - If `isPending` is true, return a `h2` element with a message indicating that the data is loading.
-
-5. **Handle the empty data state**
+4. **Handle the empty data state**
 
    - After the loading state check, add a conditional return statement that checks if `data` is null or `data.length` is less than 1.
    - If the condition is true, return null.
 
-6. **Render the chart**
+5. **Render the chart**
 
    - After the empty data state check, return a `section` element.
    - Inside the `section` element, render a `h1` element with a title for the chart.
@@ -2896,7 +2882,7 @@ export default StatsContainer;
    - Inside the `BarChart` component, render `CartesianGrid`, `XAxis`, `YAxis`, `Tooltip`, and `Bar` components.
    - Pass appropriate props to each component.
 
-7. **Export the ChartsContainer component**
+6. **Export the ChartsContainer component**
    - After defining the `ChartsContainer` component, export it so it can be used in other parts of your application.
 
 ## ChartsContainer
@@ -2916,12 +2902,11 @@ import {
 import { useQuery } from '@tanstack/react-query';
 import { getChartsDataAction } from '@/utils/actions';
 function ChartsContainer() {
-  const { data, isPending } = useQuery({
+  const { data } = useQuery({
     queryKey: ['charts'],
     queryFn: () => getChartsDataAction(),
   });
 
-  if (isPending) return <h2 className='text-xl font-medium'>Please wait...</h2>;
   if (!data || data.length < 1) return null;
   return (
     <section className='mt-16'>
@@ -2944,6 +2929,8 @@ export default ChartsContainer;
 ```
 
 ## Refactor
+
+- create ButtonContainer.tsx
 
 ```ts
 export async function getAllJobsAction({
@@ -3006,23 +2993,6 @@ export async function getAllJobsAction({
     return { jobs: [], count: 0, page: 1, totalPages: 0 };
   }
 }
-```
-
-## Create ButtonContainer
-
-```tsx
-'use client';
-import { usePathname, useRouter, useSearchParams } from 'next/navigation';
-
-type ButtonContainerProps = {
-  currentPage: number;
-  totalPages: number;
-};
-import { Button } from './ui/button';
-function ButtonContainer({ currentPage, totalPages }: ButtonContainerProps) {
-  return <h2 className='text-4xl'>button container</h2>;
-}
-export default ButtonContainer;
 ```
 
 ## Refactor JobsList
@@ -3122,8 +3092,6 @@ function ButtonContainer({ currentPage, totalPages }: ButtonContainerProps) {
   const router = useRouter();
   const pathname = usePathname();
 
-  const pageButtons = Array.from({ length: totalPages }, (_, i) => i + 1);
-
   const handlePageChange = (page: number) => {
     const defaultParams = {
       search: searchParams.get('search') || '',
@@ -3194,7 +3162,7 @@ function ButtonContainer({ currentPage, totalPages }: ButtonContainerProps) {
     }
     if (currentPage < totalPages - 2) {
       pageButtons.push(
-        <Button size='icon' variant='outline' key='dots-1'>
+        <Button size='icon' variant='outline' key='dots-2'>
           ...
         </Button>
       );
