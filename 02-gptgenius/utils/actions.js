@@ -111,6 +111,7 @@ export const getAllTours = async (searchTerm) => {
       city: 'asc',
     },
   });
+
   return tours;
 };
 

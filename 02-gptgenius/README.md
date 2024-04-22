@@ -1074,40 +1074,38 @@ Later we will use shorter prompt
 ```
 
 ```js
-const query = `Find a exact ${city} in this exact ${country}.
-If ${city} and ${country} exist, create a list of things families can do in this ${city},${country}. 
-Once you have a list, create a one-day tour. Response should be  in the following JSON format: 
+const query = `Find a ${city} in this ${country}.
+If ${city} in this ${country} exists, create a list of things families can do in this ${city},${country}. 
+Once you have a list, create a one-day tour. Response should be in the following JSON format: 
 {
   "tour": {
     "city": "${city}",
     "country": "${country}",
     "title": "title of the tour",
-    "description": "short description of the city and tour",
+    "description": "description of the city and tour",
     "stops": ["short paragraph on the stop 1 ", "short paragraph on the stop 2","short paragraph on the stop 3"]
   }
 }
-"stops" property should include only three stops.
-If you can't find info on exact ${city}, or ${city} does not exist, or it's population is less than 1, or it is not located in the following ${country},   return { "tour": null }, with no additional characters.`;
+If you can't find info on exact ${city}, or ${city} does not exist, or it's population is less than 1, or it is not located in the following ${country} return { "tour": null }, with no additional characters.`;
 ```
 
 ## GenerateTourResponse
 
 ```js
 export const generateTourResponse = async ({ city, country }) => {
-  const query = `Find a exact ${city} in this exact ${country}.
-If ${city} and ${country} exist, create a list of things families can do in this ${city},${country}. 
-Once you have a list, create a one-day tour. Response should be  in the following JSON format: 
+  const query = `Find a ${city} in this ${country}.
+If ${city} in this ${country} exists, create a list of things families can do in this ${city},${country}. 
+Once you have a list, create a one-day tour. Response should be in the following JSON format: 
 {
   "tour": {
     "city": "${city}",
     "country": "${country}",
     "title": "title of the tour",
-    "description": "short description of the city and tour",
+    "description": "description of the city and tour",
     "stops": ["short paragraph on the stop 1 ", "short paragraph on the stop 2","short paragraph on the stop 3"]
   }
 }
-"stops" property should include only three stops.
-If you can't find info on exact ${city}, or ${city} does not exist, or it's population is less than 1, or it is not located in the following ${country},   return { "tour": null }, with no additional characters.`;
+If you can't find info on exact ${city}, or ${city} does not exist, or it's population is less than 1, or it is not located in the following ${country} return { "tour": null }, with no additional characters.`;
 
   try {
     const response = await openai.chat.completions.create({
@@ -1811,7 +1809,7 @@ profile/page.js
 ```js
 import { fetchUserTokensById } from '@/utils/actions';
 import { UserProfile, auth } from '@clerk/nextjs';
-
+export const dynamic = 'force-dynamic';
 const ProfilePage = async () => {
   const { userId } = auth();
   const currentTokens = await fetchUserTokensById(userId);
@@ -1951,3 +1949,67 @@ package.json
 - planetscale
 - github repo
 - vercel
+
+### Clerk Version 5
+
+middleware.ts
+
+```ts
+import { clerkMiddleware, createRouteMatcher } from '@clerk/nextjs/server';
+
+const isProtectedRoute = createRouteMatcher([
+  '/chat(.*)',
+  '/profile(.*)',
+  '/chat(.*)',
+  '/tours(.*)',
+]);
+
+export default clerkMiddleware((auth, req) => {
+  if (isProtectedRoute(req)) auth().protect();
+});
+
+export const config = {
+  matcher: ['/((?!.*\\..*|_next).*)', '/', '/(api|trpc)(.*)'],
+};
+```
+
+MemberProfile.jsx
+
+```tsx
+import { fetchOrGenerateTokens } from '@/utils/actions';
+import { UserButton } from '@clerk/nextjs';
+import { auth, currentUser } from '@clerk/nextjs/server';
+
+const MemberProfile = async () => {
+  const user = await currentUser();
+  const { userId } = auth();
+  await fetchOrGenerateTokens(userId);
+  return (
+    <div className='px-4 flex items-center gap-2'>
+      <UserButton afterSignOutUrl='/' />
+      <p>{user.emailAddresses[0].emailAddress}</p>
+    </div>
+  );
+};
+export default MemberProfile;
+```
+
+```tsx
+import { fetchUserTokensById } from '@/utils/actions';
+import { UserProfile } from '@clerk/nextjs';
+import { auth } from '@clerk/nextjs/server';
+
+const ProfilePage = async () => {
+  const { userId } = auth();
+  const currentTokens = await fetchUserTokensById(userId);
+  return (
+    <div>
+      <h2 className='mb-8 ml-8 text-xl font-extrabold'>
+        Token Amount : {currentTokens}
+      </h2>
+      <UserProfile routing='hash' />
+    </div>
+  );
+};
+export default ProfilePage;
+```

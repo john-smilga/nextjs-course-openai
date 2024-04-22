@@ -1,5 +1,6 @@
 import { fetchUserTokensById } from '@/utils/actions';
-import { UserProfile, auth } from '@clerk/nextjs';
+import { UserProfile } from '@clerk/nextjs';
+import { auth } from '@clerk/nextjs/server';
 
 const ProfilePage = async () => {
   const { userId } = auth();
@@ -9,7 +10,7 @@ const ProfilePage = async () => {
       <h2 className='mb-8 ml-8 text-xl font-extrabold'>
         Token Amount : {currentTokens}
       </h2>
-      <UserProfile />
+      <UserProfile routing='hash' />
     </div>
   );
 };

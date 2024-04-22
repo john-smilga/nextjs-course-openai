@@ -15,7 +15,7 @@ const Chat = () => {
   const [text, setText] = useState('');
   const [messages, setMessages] = useState([]);
   const { mutate, isPending } = useMutation({
-    mutationFn: async (query) => {
+    mutationFn: async () => {
       const currentTokens = await fetchUserTokensById(userId);
 
       if (currentTokens < 100) {
@@ -23,7 +23,7 @@ const Chat = () => {
         return;
       }
 
-      const response = await generateChatResponse([...messages, query]);
+      const response = await generateChatResponse(messages);
 
       if (!response) {
         toast.error('Something went wrong...');
@@ -37,9 +37,9 @@ const Chat = () => {
   const handleSubmit = (e) => {
     e.preventDefault();
     const query = { role: 'user', content: text };
-    mutate(query);
     setMessages((prev) => [...prev, query]);
     setText('');
+    mutate();
   };
 
   return (
