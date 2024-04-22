@@ -7,7 +7,7 @@ import {
 } from '@tanstack/react-query';
 import { getAllJobsAction } from '@/utils/actions';
 
-async function JobsPage() {
+async function AllJobsPage() {
   const queryClient = new QueryClient();
 
   await queryClient.prefetchQuery({
@@ -21,4 +21,5 @@ async function JobsPage() {
     </HydrationBoundary>
   );
 }
-export default JobsPage;
+
+export default AllJobsPage;

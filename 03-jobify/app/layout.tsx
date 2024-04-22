@@ -2,11 +2,11 @@ import type { Metadata } from 'next';
 import { Inter } from 'next/font/google';
 import './globals.css';
 import { ClerkProvider } from '@clerk/nextjs';
-import Providers from './provders';
+import Providers from './providers';
 const inter = Inter({ subsets: ['latin'] });
 
 export const metadata: Metadata = {
-  title: 'Jobify Recording',
+  title: 'Jobify Dev',
   description: 'Job application tracking system for job hunters',
 };
 

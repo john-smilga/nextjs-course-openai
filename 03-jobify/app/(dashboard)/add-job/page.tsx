@@ -4,6 +4,7 @@ import {
   HydrationBoundary,
   QueryClient,
 } from '@tanstack/react-query';
+
 function AddJobPage() {
   const queryClient = new QueryClient();
   return (

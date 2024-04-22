@@ -23,7 +23,6 @@ export enum JobMode {
   PartTime = 'part-time',
   Internship = 'internship',
 }
-// Enums in TypeScript are a special type that allows you to define a set of named constants. They can be numeric or string-based.
 
 export const createAndEditJobSchema = z.object({
   position: z.string().min(2, {
