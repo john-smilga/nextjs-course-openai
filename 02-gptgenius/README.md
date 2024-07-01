@@ -2018,21 +2018,19 @@ export default ProfilePage;
 
 - stop dev server 'CTRL + C'
 
-- remove
-
+- delete
   - node_modules
   - package-lock.json
-  - package.json
+- in package.json remove following dependencies
+  - "@clerk/nextjs" and "next"
 
-    - "@clerk/nextjs" and "next"
-
-    ```json
-    "dependencies":
-    {
-    "@clerk/nextjs": "currentVersion",
-    "next": "currentVersion",
-    }
-    ```
+```json
+"dependencies":
+{
+"@clerk/nextjs": "currentVersion",
+"next": "currentVersion",
+}
+```
 
 - install latest clerk and next versions
 
@@ -2077,4 +2075,3 @@ return (
   </>
 );
 ```
-
