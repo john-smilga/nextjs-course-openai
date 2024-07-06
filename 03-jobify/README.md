@@ -2375,6 +2375,16 @@ function EditJobForm({ jobId }: { jobId: string }) {
 export default EditJobForm;
 ```
 
+## Important Info !!!
+
+If you decide to use my mock data (prisma/mock-data.js), first run this command:
+
+```sh
+node prisma/generate-data
+```
+
+This will generate jobs with the correct createdAt dates (within the last six months).
+
 ## Seed Database
 
 - create fake data in Mockaroo
