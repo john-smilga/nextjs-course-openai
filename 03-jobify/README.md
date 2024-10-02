@@ -2811,7 +2811,7 @@ export default StatsCards;
 'use client';
 import { useQuery } from '@tanstack/react-query';
 import { getStatsAction } from '@/utils/actions';
-import StatsCardfrom './StatsCard';
+import StatsCard from './StatsCard';
 
 function StatsContainer() {
   const { data } = useQuery({
