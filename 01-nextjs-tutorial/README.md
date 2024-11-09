@@ -9,7 +9,7 @@ The minimum Node.js version has been bumped from 16.14 to 18.17, since 16.x has 
 ## Create Next App
 
 ```sh
-npx create-next-app@latest appName
+npx create-next-app@14 appName
 ```
 
 ## Folder Structure
@@ -454,7 +454,7 @@ export default function DrinksLayout({ children }) {
     <div className='max-w-xl '>
       <div className='mockup-code mb-8'>
         <pre data-prefix='$'>
-          <code>npx create-next-app@latest nextjs-tutorial</code>
+          <code>npx create-next-app@14 nextjs-tutorial</code>
         </pre>
       </div>
       {children}

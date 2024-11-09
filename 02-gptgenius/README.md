@@ -1,14 +1,14 @@
 ## Create Next App
 
 ```sh
-npx create-next-app@latest appName
+npx create-next-app@14 appName
 
 ```
 
 ## Libraries
 
 ```sh
-npm install @clerk/nextjs@5.0.1 @prisma/client@5.5.2 @tanstack/react-query@5.8.1 @tanstack/react-query-devtools@5.8.1 axios@1.6.1  openai@4.14.2   react-hot-toast@2.4.1 react-icons@4.11.0
+npm install @clerk/nextjs@^4.27.7 @prisma/client@5.5.2 @tanstack/react-query@5.8.1 @tanstack/react-query-devtools@5.8.1 axios@1.6.1  openai@4.14.2   react-hot-toast@2.4.1 react-icons@4.11.0
 ```
 
 ```sh
