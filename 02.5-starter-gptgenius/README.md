@@ -5,7 +5,7 @@ npx create-next-app@14 appName
 
 ```
 
-Please use the starter project since it has all the dependencies installed, Tailwind and DaisyUI are already configured. 👍
+In the starter project, TailwindCSS and DaisyUI are already installed and configured 👍
 
 ## DaisyUI
 
@@ -76,7 +76,7 @@ export default HomePage;
 - complete Next.js setup
 
 ```sh
-npm install @clerk/nextjs
+npm install @clerk/nextjs@^4.27.7
 ```
 
 ```js

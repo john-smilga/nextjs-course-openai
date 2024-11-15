@@ -120,7 +120,7 @@ export default AboutInfoPage;
 - configure tailwind
 
 ```sh
-npm i -D daisyui@latest
+npm i -D daisyui@3.9.4
 npm i @tailwindcss/typography
 ```
 

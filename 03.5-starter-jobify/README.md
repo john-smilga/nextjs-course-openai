@@ -13,7 +13,7 @@ npx create-next-app@14 projectName
 - project repo
   - 03-jobify/assets
 
-Please use the starter project since it has all the dependencies installed, Tailwind and DaisyUI are already configured. 👍
+In the starter project, TailwindCSS and DaisyUI are already installed and configured 👍
 
 ## shadcn/ui
 
